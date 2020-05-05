@@ -46,7 +46,7 @@ def send_email(email, code):
                     这里是我们的编程教育游戏</p>
                     <p>请点击站点链接完成注册确认！</p>
                     <p>此链接有效期为{}天！</p>
-                    '''.format('127.0.0.1:8080', code, settings.CONFIRM_DAYS)
+                    '''.format('127.0.0.1:8000', code, settings.CONFIRM_DAYS)
 
     msg = EmailMultiAlternatives(subject, text_content, settings.EMAIL_HOST_USER, [email])
     msg.attach_alternative(html_content, "text/html")
@@ -66,14 +66,21 @@ def hash_code(s, salt='django_sys'):
     h.update(s.encode())
     return h.hexdigest()
 
+
 def index(request):
     if not request.session.get('is_login', None):
         return redirect('/login/')
     return render(request, 'login/index.html')
 
 
+def guest(request):
+    if request.session.get('is_login', None):
+        return redirect('/index/')
+    return render(request, 'login/guest.html')
+
+
 def login(request):
-    if request.session.get('is_login',None):
+    if request.session.get('is_login', None):
         return redirect('/index/')
     if request.method == 'POST':
         login_form = forms.UserForm(request.POST)
