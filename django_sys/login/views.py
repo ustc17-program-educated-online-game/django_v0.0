@@ -8,6 +8,7 @@ from django.conf import settings
 
 # Create your views here.
 
+
 def user_confirm(request):
     code = request.GET.get('code', None)
     message = ''
@@ -30,6 +31,7 @@ def user_confirm(request):
         message = '感谢确认，请使用账户登录！'
         return render(request, 'login/confirm.html', locals())
 
+
 def send_email(email, code):
 
     from django.core.mail import EmailMultiAlternatives
@@ -50,6 +52,7 @@ def send_email(email, code):
     msg.attach_alternative(html_content, "text/html")
     msg.send()
 
+
 def make_confirm_string(user):
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     code = hash_code(user.name, now)
@@ -57,7 +60,7 @@ def make_confirm_string(user):
     return code
 
 
-def hash_code(s,salt='django_sys'):
+def hash_code(s, salt='django_sys'):
     h = hashlib.sha256()
     s += salt
     h.update(s.encode())
