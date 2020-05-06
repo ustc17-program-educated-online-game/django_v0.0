@@ -1,59 +1,73 @@
-{% load static %}
+﻿{% load static %}
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- 上述meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
     <!-- Bootstrap CSS -->
     <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{% static 'login/css/login.css' %}" rel="stylesheet"/>
+    <link href="{% static 'login/css/login.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="{%static 'login/fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
     <title>登录</title>
-  </head>
-  <body>
-    <div class="container">
+</head>
+<body>
+    <div class="limiter">
+        <div class="container">
             <div class="col">
+                <div class="login-pic">
+                    <img src="{% static 'login/image/test1.jpg' %}" alt="IMG">
+                </div>
                 <form class="form-login" action="/login/" method="post">
 
-                {% if login_form.captcha.errors %}
+                    {% if login_form.captcha.errors %}
                     <div class="alert alert-warning">{{ login_form.captcha.errors }}</div>
-                {% elif message %}
+                    {% elif message %}
                     <div class="alert alert-warning">{{ message }}</div>
-                {% endif %}
+                    {% endif %}
 
-                  {% csrf_token %}
-                  <h3 class="text-center">欢迎登录</h3>
+                    {% csrf_token %}
+                    <span class="login-form-title">&raquo;&nbsp;欢&nbsp;迎&nbsp;登&nbsp;陆&nbsp;&laquo;</span>
 
-                  <div class="form-group">
-                    {{ login_form.username.label_tag }}
-                    {{ login_form.username}}
-                  </div>
+                    <div class="form-group">
+                        {{ login_form.username}}
+                        <span class="focus-input"></span>
+                        <span class="symbol-input">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                        </span>
+                    </div>
 
-                  <div class="form-group">
-                    {{ login_form.password.label_tag }}
-                    {{ login_form.password }}
-                  </div>
+                    <div class="form-group">
+                        {{ login_form.password }}
+                        <span class="focus-input"></span>
+                        <span class="symbol-input">
+                            <i class="fa fa-lock" aria-hidden="true"></i>
+                        </span>
+                    </div>
 
-                  <div class="form-group">
-                    {{ login_form.captcha.label_tag }}
-                    {{ login_form.captcha }}
-                  </div>
+                    <div class="form-group form-captcha">
+                        {{ login_form.captcha}}
+                        <span class="focus-input"></span>
+                    </div>
 
-                  <div>
-                      <a href="/register/" class="text-success " ><ins>新用户注册</ins></a>
-                      <button type="submit" class="btn btn-primary float-right">登录</button>
-                  </div>
+                    <div class="container-login-form-btn">
+                        <button type="submit" class="login-form-btn">登&nbsp;&nbsp;录</button>
+                    </div>
+
+                    <div class="text-center login-to-register">
+                        <a href="/register/" class="text1 ">新用户注册&nbsp;&raquo;</a>
+                    </div>
                 </form>
             </div>
-    </div> <!-- /container -->
+        </div> <!-- /container -->
+    </div>
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        {#    以下三者的引用顺序是固定的#}
+        <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+        <script src="https://cdn.bootcss.com/popper.js/1.15.0/umd/popper.js"></script>
+        <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    {#    以下三者的引用顺序是固定的#}
-    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
-    <script src="https://cdn.bootcss.com/popper.js/1.15.0/umd/popper.js"></script>
-    <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
-  </body>
+</body>
 </html>

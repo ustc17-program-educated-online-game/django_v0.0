@@ -1,4 +1,4 @@
-{% load static %}
+﻿{% load static %}
 <!doctype html>
 <html lang="en">
   <head>
@@ -12,62 +12,71 @@
     <title>注册</title>
   </head>
   <body>
-    <div class="container">
-            <div class="col">
-                <form class="form-register" action="/register/" method="post">
+      <div class="limiter">
+          <div class="container">
+              <div class="col">
+                  <form class="form-register" action="/register/" method="post">
 
-                    {% if register_form.captcha.errors %}
-                        <div class="alert alert-warning">{{ register_form.captcha.errors }}</div>
-                    {% elif message %}
-                        <div class="alert alert-warning">{{ message }}</div>
-                    {% endif %}
+                      {% if register_form.captcha.errors %}
+                      <div class="alert alert-warning">{{ register_form.captcha.errors }}</div>
+                      {% elif message %}
+                      <div class="alert alert-warning">{{ message }}</div>
+                      {% endif %}
 
-                  {% csrf_token %}
-                  <h3 class="text-center">欢迎注册</h3>
+                      {% csrf_token %}
+                      <h3 class="register-form-title">&raquo;&nbsp;欢&nbsp;迎&nbsp;注&nbsp;册&nbsp;&laquo;</h3>
 
-                  <div class="form-group">
-                      {{ register_form.username.label_tag }}
-                      {{ register_form.username}}
-                  </div>
-                  <div class="form-group">
-                      {{ register_form.password1.label_tag }}
-                      {{ register_form.password1 }}
-                  </div>
-                  <div class="form-group">
-                      {{ register_form.password2.label_tag }}
-                      {{ register_form.password2 }}
-                  </div>
-                  <div class="form-group">
-                      {{ register_form.email.label_tag }}
-                      {{ register_form.email }}
-                  </div>
-                  <div class="form-group">
-                      {{ register_form.sex.label_tag }}
-                      {{ register_form.sex }}
-                  </div>
-                  <div class="form-group">
-                      {{ register_form.mobile.label_tag }}
-                      {{ register_form.mobile }}
-                  </div>
-                  <div class="form-group">
-                      {{ register_form.captcha.label_tag }}
-                      {{ register_form.captcha }}
-                  </div>
+                      <div class="form-group">
+                          {{ register_form.username.label_tag }}
+                          {{ register_form.username}}
+                          <span class="focus-input"></span>
+                      </div>
+                      <div class="form-group">
+                          {{ register_form.password1.label_tag }}
+                          {{ register_form.password1 }}
+                          <span class="focus-input"></span>
+                      </div>
+                      <div class="form-group">
+                          {{ register_form.password2.label_tag }}
+                          {{ register_form.password2 }}
+                          <span class="focus-input"></span>
+                      </div>
+                      <div class="form-group">
+                          {{ register_form.email.label_tag }}
+                          {{ register_form.email }}
+                          <span class="focus-input"></span>
+                      </div>
+                      <div class="form-group form-choice">
+                          {{ register_form.sex.label_tag }}
+                          {{ register_form.sex }}
+                      </div>
+                      <div class="form-group">
+                          {{ register_form.mobile.label_tag }}
+                          {{ register_form.mobile }}
+                          <span class="focus-input"></span>
+                      </div>
+                      <div class="form-group form-captcha">
+                          {{ register_form.captcha.label_tag }}
+                          {{ register_form.captcha }}
+                          <span class="focus-input"></span>
+                      </div>
 
-                  <div>
-                      <a href="/login/"  ><ins>直接登录</ins></a>
-                      <button type="submit" class="btn btn-primary float-right">注册</button>
-                  </div>
-                </form>
-            </div>
-    </div> <!-- /container -->
-
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    {#    以下三者的引用顺序是固定的#}
-    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
-    <script src="https://cdn.bootcss.com/popper.js/1.15.0/umd/popper.js"></script>
-    <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+                      <div class="container-register-form-btn">
+                          <button type="submit" class="register-form-btn float-right">注&nbsp;册</button>
+                      </div>
+                      <div class="text-center register-to-login">
+                          <a href="/login/">直接登录&nbsp;&raquo;</a>
+                      </div>
+                  </form>
+              </div>
+          </div> <!-- /container -->
+      </div>
+          <!-- Optional JavaScript -->
+          <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+          {#    以下三者的引用顺序是固定的#}
+          <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+          <script src="https://cdn.bootcss.com/popper.js/1.15.0/umd/popper.js"></script>
+          <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
   </body>
 </html>
