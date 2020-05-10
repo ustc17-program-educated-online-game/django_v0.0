@@ -143,7 +143,7 @@ def register(request):
                     return render(request, 'login/register.html', locals())
                 same_mobile_user = models.User.objects.filter(mobile=mobile)
                 if same_mobile_user:
-                    message = '该收集已经被注册了！'
+                    message = '该手机已经被注册了！'
                     return render(request, 'login/register.html', locals())
 
                 new_user = models.User()
