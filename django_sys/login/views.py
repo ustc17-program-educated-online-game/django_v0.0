@@ -8,6 +8,7 @@ from django.conf import settings
 
 # Create your views here.
 
+
 def user_confirm(request):
     code = request.GET.get('code', None)
     message = ''
@@ -30,6 +31,7 @@ def user_confirm(request):
         message = '感谢确认，请使用账户登录！'
         return render(request, 'login/confirm.html', locals())
 
+
 def send_email(email, code):
 
     from django.core.mail import EmailMultiAlternatives
@@ -44,11 +46,12 @@ def send_email(email, code):
                     这里是我们的编程教育游戏</p>
                     <p>请点击站点链接完成注册确认！</p>
                     <p>此链接有效期为{}天！</p>
-                    '''.format('127.0.0.1:8080', code, settings.CONFIRM_DAYS)
+                    '''.format('127.0.0.1:8000', code, settings.CONFIRM_DAYS)
 
     msg = EmailMultiAlternatives(subject, text_content, settings.EMAIL_HOST_USER, [email])
     msg.attach_alternative(html_content, "text/html")
     msg.send()
+
 
 def make_confirm_string(user):
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -57,11 +60,12 @@ def make_confirm_string(user):
     return code
 
 
-def hash_code(s,salt='django_sys'):
+def hash_code(s, salt='django_sys'):
     h = hashlib.sha256()
     s += salt
     h.update(s.encode())
     return h.hexdigest()
+
 
 def index(request):
     if not request.session.get('is_login', None):
@@ -69,8 +73,14 @@ def index(request):
     return render(request, 'login/index.html')
 
 
+def guest(request):
+    if request.session.get('is_login', None):
+        return redirect('/index/')
+    return render(request, 'login/guest.html')
+
+
 def login(request):
-    if request.session.get('is_login',None):
+    if request.session.get('is_login', None):
         return redirect('/index/')
     if request.method == 'POST':
         login_form = forms.UserForm(request.POST)
