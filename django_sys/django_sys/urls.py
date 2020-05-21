@@ -28,4 +28,5 @@ urlpatterns = [
     path('captcha/', include('captcha.urls')),
     path('confirm/', views.user_confirm),
     path('guest/', views.guest),
+    path('game/', views.game),
 ]
