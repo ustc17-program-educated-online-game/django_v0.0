@@ -17,16 +17,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.urls import include
-from login import views
+from login import views as views1
+from game import views as views2
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('index/', views.index),
-    path('login/', views.login),
-    path('register/', views.register),
-    path('logout/', views.logout),
+    path('index/', views1.index),
+    path('login/', views1.login),
+    path('register/', views1.register),
+    path('logout/', views1.logout),
     path('captcha/', include('captcha.urls')),
-    path('confirm/', views.user_confirm),
-    path('guest/', views.guest),
-    path('game/', views.game),
+    path('confirm/', views1.user_confirm),
+    path('guest/', views1.guest),
+    path('game/', views2.game),
 ]

@@ -3,6 +3,31 @@ from . import models
 import json
 from django.http import JsonResponse
 
+class character:
+    x = 0
+    y = 0
+    state = 'u'
+    type = 1
+
+class treasure:
+    x = 0
+    y = 0
+    collected = 0
+
+class point:
+    x = 0
+    y = 0
+
+class map:
+    id = 0
+    name = 'map'
+    length = 10
+    width = 10
+    state = 0
+    start = point()
+    end = point()
+    character = character()
+    treature = treasure()
 
 def inspect(map):
     x = map.character.x
@@ -157,6 +182,25 @@ def code_action(map, codeList):
                 actionList.append('collectFail')
     return {'map': map, 'actionList': actionList}
 
+def transfer(map):
+    result = map()
+    result.id = map.id
+    result.name = map.name
+    result.width = map.width
+    result.length = map.length
+    result.state = [[map.state[i*map.length+j-1] for j in range(0,map.width)] for i in range(0,map.length)]
+    result.start.x = map.startx
+    result.start.y = map.starty
+    result.end.x = map.endx
+    result.end.y = map.endy
+    result.treasure.x = map.treasurex
+    result.treasure.y = map.treasurey
+    result.treasure.collected = 0
+    result.character.type = map.characterType
+    result.character.x = map.startx
+    result.character.y = map.starty
+    result.character.state = map.characterState
+    return result
 
 def game(request):
     if request.method == 'POST':
@@ -165,6 +209,7 @@ def game(request):
             map = models.Map.objects.get(id=data.id)
         except:
             return JsonResponse({'state': 'error', 'message': 'map not exist'})
+        map = transfer(map)
         result = code_action(map, data.codeList)
         x = result.map.character.x
         y = result.map.character.y
