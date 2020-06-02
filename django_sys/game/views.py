@@ -3,31 +3,31 @@ from . import models
 import json
 from django.http import JsonResponse
 
-class character:
+class CHARACTER:
     x = 0
     y = 0
     state = 'u'
     type = 1
 
-class treasure:
+class TREASURE:
     x = 0
     y = 0
     collected = 0
 
-class point:
+class POINT:
     x = 0
     y = 0
 
-class map:
+class MAP:
     id = 0
     name = 'map'
     length = 10
     width = 10
-    state = 0
-    start = point()
-    end = point()
-    character = character()
-    treature = treasure()
+    state = []
+    start = POINT()
+    end = POINT()
+    character = CHARACTER()
+    treasure = TREASURE()
 
 def inspect(map):
     x = map.character.x
@@ -62,16 +62,16 @@ def code_action(map, codeList):
     y = map.character.y
     direction = map.character.state
     while len(codeList) != 0:
-        code = codeList.pop(0)
-        if code.goStraight != 0:
-            if code.goStraight_num != -1:
-                number = code.goStraight_num
+        code = codeList.pop(0) #code是dict类型
+        if code['goStraight'] != 0:
+            if code['goStraight'] != -1:
+                number = int(code['goStraight'])
             else:
                 number = 1
             i = 0
             if direction == 'u':
                 while i < number:
-                    if y < map.weight-1 and map.state[x][y+1] != 2:
+                    if y < map.width-1 and map.state[x][y+1] != '2' and map.state[x-1][y] != 2:
                         y = y + 1
                         i = i + 1
                         actionList.append('goUp')
@@ -79,7 +79,7 @@ def code_action(map, codeList):
                         break
             elif direction == 'd':
                 while i < number:
-                    if y > 0 and map.state[x][y-1] != 2:
+                    if y > 0 and map.state[x][y-1] != '2' and map.state[x][y-1] != 2:
                         y = y - 1
                         i = i + 1
                         actionList.append('goDown')
@@ -87,7 +87,7 @@ def code_action(map, codeList):
                         break
             elif direction == 'l':
                 while i < number:
-                    if x > 0 and map.state[x-1][y] != 2:
+                    if x > 0 and map.state[x-1][y] != '2' and map.state[x-1][y] != 2:
                         x = x - 1
                         i = i + 1
                         actionList.append('goLeft')
@@ -95,7 +95,7 @@ def code_action(map, codeList):
                         break
             elif direction == 'r':
                 while i < number:
-                    if x < map.length-1 and map.state[x+1][y] != 2:
+                    if x < map.length-1 and map.state[x+1][y] != '2' and map.state[x+1][y] != 2:
                         x = x + 1
                         i = i + 1
                         actionList.append('goRight')
@@ -103,7 +103,7 @@ def code_action(map, codeList):
                         break
             map.character.x = x
             map.character.y = y
-        elif code.turnLeft == 1:
+        elif code['turnLeft'] == 1:
             if direction == 'u':
                 direction = 'l'
             elif direction == 'd':
@@ -114,7 +114,7 @@ def code_action(map, codeList):
                 direction = 'u'
             actionList.append('turnLeft')
             map.character.state = direction
-        elif code.turnRight == 1:
+        elif code['turnRight'] == 1:
             if direction == 'u':
                 direction = 'r'
             elif direction == 'd':
@@ -125,7 +125,7 @@ def code_action(map, codeList):
                 direction = 'd'
             actionList.append('turnRight')
             map.character.state = direction
-        elif code.inspect == 1:
+        elif code['inspect'] == 1:
             result = inspect(map)
             if result == 1:
                 actionList.append('isBlank')
@@ -135,18 +135,18 @@ def code_action(map, codeList):
                 actionList.append('isTreasure')
             elif result == 0:
                 actionList.append('isEdge')
-        elif code.condition is not None:
+        elif code['condition']:
             inspect_result = inspect(map)
-            if code.condition.expression == 1:
-                if inspect_result == code.condition.val:
-                    inner_code = code.condition.code
+            if code['condition'].expression == 1:
+                if inspect_result == code['condition'].val:
+                    inner_code = code['condition'].code
                 else:
-                    inner_code = code.condition.else_code
-            elif code.condition.expression == 2:
-                if inspect_result != code.condition.val:
-                    inner_code = code.condition.code
+                    inner_code = code['condition'].else_code
+            elif code['condition'].expression == 2:
+                if inspect_result != code['condition'].val:
+                    inner_code = code['condition'].code
                 else:
-                    inner_code = code.condition.else_code
+                    inner_code = code['condition'].else_code
             code_result = code_action(map, inner_code)
             map = code_result.map
             x = map.character.x
@@ -154,17 +154,17 @@ def code_action(map, codeList):
             direction = map.character.state
             for i in code_result.actionList:
                 actionList.append(i)
-        elif code.circulate is not None:
+        elif code['circulate']:
             while 1:
                 inspect_result = inspect(map)
-                if code.circulate.expression == 1:
-                    if inspect_result == code.circulate.val:
-                        inner_code = code.circulate.code
+                if code['circulate'].expression == 1:
+                    if inspect_result == code['circulate'].val:
+                        inner_code = code['circulate'].code
                     else:
                         break
-                elif code.circulate.expression == 2:
-                    if inspect_result != code.circulate.val:
-                        inner_code = code.circulate.code
+                elif code['circulate'].expression == 2:
+                    if inspect_result != code['circulate'].val:
+                        inner_code = code['circulate'].code
                     else:
                         break
                 code_result = code_action(map, inner_code)
@@ -174,21 +174,22 @@ def code_action(map, codeList):
                 direction = map.character.state
                 for action in code_result.actionList:
                     actionList.append(action)
-        elif code.open == 1:
-            if map.state[x][y] == 3:
+        elif code['open'] == 1:
+            if map.state[x][y] == 3 or map.state[x][y] == '3':
                 actionList.append('collectSuccess')
                 map.treasure.collected = 1
             else:
                 actionList.append('collectFail')
+    print("actionList:",actionList)
     return {'map': map, 'actionList': actionList}
 
 def transfer(map):
-    result = map()
+    result = MAP()
     result.id = map.id
     result.name = map.name
     result.width = map.width
     result.length = map.length
-    result.state = [[map.state[i*map.length+j-1] for j in range(0,map.width)] for i in range(0,map.length)]
+    result.state = [[map.state[i*map.length+j] for j in range(0,map.width)] for i in range(0,map.length)]
     result.start.x = map.startx
     result.start.y = map.starty
     result.end.x = map.endx
@@ -202,30 +203,42 @@ def transfer(map):
     result.character.state = map.characterState
     return result
 
+def ClassToDict(obj):
+    pr = {}
+    for name in dir(obj):
+        value = getattr(obj, name)
+        if not name.startswith('__') and not callable(value):
+            if type(value).__name__ == "CHARACTER" or type(value).__name__ == "POINT" or type(value).__name__ == "TREASURE":
+                value = ClassToDict(value)
+            pr[name] = value
+    return pr
+
 def game(request):
     if request.method == 'POST':
+        print("request:",request.body.decode("utf-8")) #for test
         data = json.loads(request.body)
         try:
-            map = models.Map.objects.get(id=data.id)
+            map0 = models.Map.objects.get(id=data['id'])
         except:
             return JsonResponse({'state': 'error', 'message': 'map not exist'})
-        map = transfer(map)
-        result = code_action(map, data.codeList)
-        x = result.map.character.x
-        y = result.map.character.y
+        map = transfer(map0)
+        result = code_action(map, data['codeList'])#dict类型
+        x = result['map'].character.x 
+        y = result['map'].character.y
         if map.end.x == x and map.end.y == y:
             if map.treasure is not None:
-                if result.map.treasure.collected == 1:
-                    result.actionList.append('endMissionSuccess')
-                    JsonResponse({'state': 'end', 'message': 'success', 'map': result.map, 'actionList': result.actionList})
+                if result['map'].treasure.collected == 1:
+                    result['actionList'].append('endMissionSuccess')
+                    return JsonResponse({'state': 'end', 'message': 'success', 'map': ClassToDict(result['map']), 'actionList': result['actionList']})
                 else:
-                    result.actionList.append('endMissionFail')
-                    JsonResponse({'state': 'end', 'message': 'treasure not collected', 'map': result.map, 'actionList': result.actionList})
+                    result['actionList'].append('endMissionFail')
+                    return JsonResponse({'state': 'end', 'message': 'treasure not collected', 'map': ClassToDict(result['map']), 'actionList': result['actionList']})
             else:
-                result.actionList.append('endMissionSuccess')
-                JsonResponse({'state': 'end', 'message': 'success', 'map': result.map, 'actionList': result.actionList})
+                result['actionList'].append('endMissionSuccess')
+                return JsonResponse({'state': 'end', 'message': 'success', 'map': ClassToDict(result['map']), 'actionList': result['actionList']})
         else:
-            result.actionList.append('endMissionFail')
-            JsonResponse({'state': 'end', 'message': 'destination not arrive', 'map': result.map, 'actionList': result.actionList})
-
+            result['actionList'].append('endMissionFail')
+            return JsonResponse({'state': 'end', 'message': 'destination not arrive', 'map': ClassToDict(result['map']), 'actionList': result['actionList']})
+    else:
+        return render(request, 'test.html',locals())#for test
 # Create your views here.

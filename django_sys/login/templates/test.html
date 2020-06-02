@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+    TEST!
+</head>
+<body>
+ <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+ <script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+<script type='text/javascript'>
+	<!--定义JSON数组-->
+	var jsonArr = JSON.stringify({
+    "id": 1, //只有该项为必须项，其他项都为可选可重复的
+    "type": "continue", // 可选值为continue和onestep，onestep的话只返回一条动作
+    "codeList":  //codeList应为一个列表，列表中的每项为如下内容
+    [{
+        "goStraight": 1,//-1代表无参数直行(实际上也是直行1格)
+        "turnLeft": 0, //1代表左转，0代表不左转，下同
+        "turnRight": 0,
+        "inspect": 1, // 探索面前一格的信息，空格返回'isBlank'，障碍'isObstacle'，宝藏'isTreasure'，边沿'isEdge'
+        "condition": { // 必须包含一个inspect函数
+            "express": 1, // 1代表==,2代表!=
+            "val": "", // 取值范围与inspect函数返回值一致
+            "code": "",// 可以嵌套其他代码
+            "else_code": "" //可以为空，嵌套其他代码
+        },
+        "circulate": {// 必须嵌套一个inspect函数
+            "expression": 1, //1代表==，2代表!=
+            "val": "",  // 取值范围与inspect函数返回值一致
+            "code": ""// 嵌套其他代码
+
+        },
+        "open": 0//打开面前一格的宝箱,成功返回'collectSuccess',失败返回'collectFail'
+    },{
+        "goStraight": 0,//-1代表无参数直行(实际上也是直行1格)
+        "turnLeft": 1, //1代表左转，0代表不左转，下同
+        "turnRight": 0,
+        "inspect": 0, // 探索面前一格的信息，空格返回'isBlank'，障碍'isObstacle'，宝藏'isTreasure'，边沿'isEdge'
+        "condition": { // 必须包含一个inspect函数
+            "express": 1, // 1代表==,2代表!=
+            "val": "", // 取值范围与inspect函数返回值一致
+            "code": "",// 可以嵌套其他代码
+            "else_code": "" //可以为空，嵌套其他代码
+        },
+        "circulate": {// 必须嵌套一个inspect函数
+            "expression": 1, //1代表==，2代表!=
+            "val": "",  // 取值范围与inspect函数返回值一致
+            "code": ""// 嵌套其他代码
+
+        },
+        "open": 0//打开面前一格的宝箱,成功返回'collectSuccess',失败返回'collectFail'
+    },{
+        "goStraight": 0,//-1代表无参数直行(实际上也是直行1格)
+        "turnLeft": 0, //1代表左转，0代表不左转，下同
+        "turnRight": 0,
+        "inspect": 0, // 探索面前一格的信息，空格返回'isBlank'，障碍'isObstacle'，宝藏'isTreasure'，边沿'isEdge'
+        "condition": '',
+        "circulate": '',
+        "open": 1//打开面前一格的宝箱,成功返回'collectSuccess',失败返回'collectFail'
+    },{
+        "goStraight": 1,//-1代表无参数直行(实际上也是直行1格)
+        "turnLeft": 0, //1代表左转，0代表不左转，下同
+        "turnRight": 0,
+        "inspect": 0, // 探索面前一格的信息，空格返回'isBlank'，障碍'isObstacle'，宝藏'isTreasure'，边沿'isEdge'
+        "condition": { // 必须包含一个inspect函数
+            "express": 1, // 1代表==,2代表!=
+            "val": "", // 取值范围与inspect函数返回值一致
+            "code": "",// 可以嵌套其他代码
+            "else_code": "" //可以为空，嵌套其他代码
+        },
+        "circulate": {// 必须嵌套一个inspect函数
+            "expression": 1, //1代表==，2代表!=
+            "val": "",  // 取值范围与inspect函数返回值一致
+            "code": ""// 嵌套其他代码
+
+        },
+        "open": 1//打开面前一格的宝箱,成功返回'collectSuccess',失败返回'collectFail'
+    }]
+});
+
+	function sendJson() {
+		$.ajax({
+			type : "POST",
+			url : "http://127.0.0.1:8000/game/",
+            dataType : "json",
+            data: jsonArr,
+            contentType : "application/json; charset=utf-8",
+            headers:{"X-CSRFToken":$.cookie('csrftoken')},
+            success: function (data) {
+                //var v = eval("(" + data + ")");
+                //console.log(v);
+                //alert(JSON.stringify(data));
+                console.log(JSON.stringify(data));
+                //console.log("数据对象：" + data + data.length);
+            },
+            error: function(err) {
+                console.log(err);
+            }
+		});
+	}
+
+
+	sendJson();
+
+</script>
+
+</body>
+</html>
