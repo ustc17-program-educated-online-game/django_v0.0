@@ -35,29 +35,30 @@ def inspect(map):
     direction = map.character.state
     if direction == 'u':
         if y < map.width-1:
-            result = map.state[x][y+1]
+            result = int(map.state[x][y+1])
         else:
             result = 0
     if direction == 'd':
         if y > 0:
-            result = map.state[x][y-1]
+            result = int(map.state[x][y-1])
         else:
             result = 0
     if direction == 'l':
         if x > 0:
-            result = map.state[x-1][y]
+            result = int(map.state[x-1][y])
         else:
             result = 0
     if direction == 'r':
         if x < map.length-1:
-            result = map.state[x+1][y]
+            result = int(map.state[x+1][y])
         else:
             result = 0
     return result
 
 
-def code_action(map, codeList):
+def code_action(map, codeList0):
     actionList = []
+    codeList = codeList0[:] #copy list
     x = map.character.x
     y = map.character.y
     direction = map.character.state
@@ -137,42 +138,44 @@ def code_action(map, codeList):
                 actionList.append('isEdge')
         elif code['condition']:
             inspect_result = inspect(map)
-            if code['condition'].expression == 1:
-                if inspect_result == code['condition'].val:
-                    inner_code = code['condition'].code
+            if code['condition']['expression'] == 1:
+                if inspect_result == code['condition']['val']:
+                    inner_code = code['condition']['code']
                 else:
-                    inner_code = code['condition'].else_code
-            elif code['condition'].expression == 2:
-                if inspect_result != code['condition'].val:
-                    inner_code = code['condition'].code
+                    inner_code = code['condition']['else_code']
+            elif code['condition']['expression'] == 2:
+                if inspect_result != code['condition']['val']:
+                    inner_code = code['condition']['code']
                 else:
-                    inner_code = code['condition'].else_code
+                    inner_code = code['condition']['else_code']
             code_result = code_action(map, inner_code)
-            map = code_result.map
+            map = code_result['map']
             x = map.character.x
             y = map.character.y
             direction = map.character.state
-            for i in code_result.actionList:
+            for i in code_result['actionList']:
                 actionList.append(i)
         elif code['circulate']:
-            while 1:
+            i = 0 #for safe
+            while i < 999999 :
+                i = i + 1
                 inspect_result = inspect(map)
-                if code['circulate'].expression == 1:
-                    if inspect_result == code['circulate'].val:
-                        inner_code = code['circulate'].code
+                if code['circulate']['expression'] == 1:
+                    if inspect_result == code['circulate']['val']:
+                        inner_code = code['circulate']['code']
                     else:
                         break
-                elif code['circulate'].expression == 2:
-                    if inspect_result != code['circulate'].val:
-                        inner_code = code['circulate'].code
+                elif code['circulate']['expression'] == 2:
+                    if inspect_result != code['circulate']['val']:
+                        inner_code = code['circulate']['code']
                     else:
                         break
                 code_result = code_action(map, inner_code)
-                map = code_result.map
+                map = code_result['map']
                 x = map.character.x
                 y = map.character.y
                 direction = map.character.state
-                for action in code_result.actionList:
+                for action in code_result['actionList']:
                     actionList.append(action)
         elif code['open'] == 1:
             if map.state[x][y] == 3 or map.state[x][y] == '3':
