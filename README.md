@@ -7,3 +7,5 @@
 
 1.  ```python manage.py migrate```
 2. ```python manage.py runserver 8080```
+
+# date：6.3 master已更新至最新版本，后续任务代码编写请基于master分支
