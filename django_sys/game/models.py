@@ -28,6 +28,7 @@ class Map(models.Model):
 class PlayerInfo(models.Model):
     name = models.CharField(max_length=128, unique=True)
     passMapNumber = models.IntegerField()
+    userLevel = models.IntegerField(default=1)       # 用户级别:1游客，2登录用户
 
 class HistoryInfo(models.Model):
     name = models.CharField(max_length=128, unique=True)

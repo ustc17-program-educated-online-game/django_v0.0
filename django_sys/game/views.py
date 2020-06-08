@@ -192,7 +192,7 @@ def transfer(map):
     result.name = map.name
     result.width = map.width
     result.length = map.length
-    result.state = [[map.state[i*map.length+j] for j in range(0,map.width)] for i in range(0,map.length)]
+    result.state = [[map.state[i*map.length+j] for j in range(0,map.length)] for i in range(0,map.width)]
     result.start.x = map.startx
     result.start.y = map.starty
     result.end.x = map.endx
@@ -244,4 +244,29 @@ def game(request):
             return JsonResponse({'state': 'end', 'message': 'destination not arrive', 'map': ClassToDict(result['map']), 'actionList': result['actionList']})
     else:
         return render(request, 'test.html',locals())#for test
+
+
+def map_editer(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        id = data.user_id
+        map = models.Map()
+        map.id = id
+        map.name = data.map.name
+        map.length = data.map.length
+        map.width = data.map.width
+        for i in range(data.map.width):
+            for j in range(data.map.length):
+                map.state[i*length+j] = data.map.state[i][j]
+        map.startx = data.map.start.x
+        map.starty = data.map.start.y
+        map.endx = data.map.end.x
+        map.endy = data.map.end.y
+        map.treasurex = data.map.treasure.x
+        map.treasurey = data.map.treasure.y
+        map.characterState = data.map.character.state
+        map.characterType = data.map.character.type
+        map.save()
+        return JsonResponse({'message': 'success'})
+
 # Create your views here.

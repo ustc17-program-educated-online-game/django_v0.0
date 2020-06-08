@@ -5,6 +5,8 @@ from . import forms
 import hashlib
 import datetime
 from django.conf import settings
+import json
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -68,15 +70,13 @@ def hash_code(s, salt='django_sys'):
 
 
 def index(request):
+    user_id = request.session.get('user_id', None)
+    user_name = request.session.get('user_name', None)
     if not request.session.get('is_login', None):
-        return redirect('/login/')
-    return render(request, 'login/index.html')
-
-
-def guest(request):
-    if request.session.get('is_login', None):
-        return redirect('/index/')
-    return render(request, 'login/guest.html')
+        user_level = 1
+    else:
+        user_level = 2
+    return JsonResponse({'user_id': user_id, 'user_name': user_name, 'user_level': user_level})
 
 
 def login(request):

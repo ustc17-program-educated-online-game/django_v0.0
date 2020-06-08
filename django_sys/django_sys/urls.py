@@ -28,6 +28,5 @@ urlpatterns = [
     path('logout/', views1.logout),
     path('captcha/', include('captcha.urls')),
     path('confirm/', views1.user_confirm),
-    path('guest/', views1.guest),
     path('game/', views2.game),
 ]
