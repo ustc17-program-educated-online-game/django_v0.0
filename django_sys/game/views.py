@@ -245,3 +245,14 @@ def game(request):
     else:
         return render(request, 'test.html',locals())#for test
 # Create your views here.
+
+# return map information
+def map_info(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        try:
+            map0 = models.Map.objects.get(id=data['id'])
+        except:
+            return JsonResponse({'message': 'map not exist'})
+        map = transfer(map0)
+        return JsonResponse({'message': 'map open success', 'map' : ClassToDict(map)})

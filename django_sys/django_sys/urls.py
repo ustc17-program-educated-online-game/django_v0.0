@@ -30,4 +30,5 @@ urlpatterns = [
     path('confirm/', views1.user_confirm),
     path('guest/', views1.guest),
     path('game/', views2.game),
+    path('map/',views2.map_info)
 ]

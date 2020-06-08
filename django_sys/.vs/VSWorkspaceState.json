@@ -1,8 +1,7 @@
 {
   "ExpandedNodes": [
     "",
-    "\\login",
-    "\\login\\templates",
+    "\\game",
     "\\login\\templates\\login",
     "\\static",
     "\\static\\login",
@@ -12,5 +11,6 @@
     "\\static\\login\\fonts\\font-awesome-4.7.0\\fonts",
     "\\static\\login\\fonts\\font-awesome-4.7.0\\scss"
   ],
+  "SelectedNode": "\\game",
   "PreviewInSolutionExplorer": false
 }
