@@ -70,14 +70,16 @@ def hash_code(s, salt='django_sys'):
 
 
 def index(request):
-    user_id = request.session.get('user_id', None)
-    user_name = request.session.get('user_name', None)
-    if not request.session.get('is_login', None):
-        user_level = 1
+    if request.method == 'POST':
+        user_id = request.session.get('user_id', None)
+        user_name = request.session.get('user_name', None)
+        if not request.session.get('is_login', None):
+            user_level = 1
+        else:
+            user_level = 2
+        return JsonResponse({'user_id': user_id, 'user_name': user_name, 'user_level': user_level})
     else:
-        user_level = 2
-    return JsonResponse({'user_id': user_id, 'user_name': user_name, 'user_level': user_level})
-
+        return render(request, 'login/index.html', locals())
 
 def login(request):
     if request.session.get('is_login', None):
