@@ -246,28 +246,32 @@ def game(request):
         return render(request, 'test.html',locals())#for test
 
 
-def map_editer(request):
+def map_editor(request):
     if request.method == 'POST':
         data = json.loads(request.body)
-        id = data.user_id
+        id = data['user_id']
         map = models.Map()
         map.id = id
-        map.name = data.map.name
-        map.length = data.map.length
-        map.width = data.map.width
-        for i in range(data.map.width):
-            for j in range(data.map.length):
-                map.state[i*length+j] = data.map.state[i][j]
-        map.startx = data.map.start.x
-        map.starty = data.map.start.y
-        map.endx = data.map.end.x
-        map.endy = data.map.end.y
-        map.treasurex = data.map.treasure.x
-        map.treasurey = data.map.treasure.y
-        map.characterState = data.map.character.state
-        map.characterType = data.map.character.type
+        map.name = data['map']['name']
+        map.length = data['map']['length']
+        map.width = data['map']['width']
+        datalist = []
+        for i in range(map.width):
+            for j in range(map.length):
+                datalist.append(str(data['map']['state'][i][j]))
+        map.state = "".join(datalist)
+        map.startx = data['map']['start']['x']
+        map.starty = data['map']['start']['y']
+        map.endx = data['map']['end']['x']
+        map.endy = data['map']['end']['y']
+        map.treasurex = data['map']['treasure']['x']
+        map.treasurey = data['map']['treasure']['y']
+        map.characterState = data['map']['character']['state']
+        map.characterType = data['map']['character']['type']
         map.save()
         return JsonResponse({'message': 'success'})
+    else:
+        return render(request, 'map_editor_test.html', locals())  # for test
 
 # Create your views here.
 
@@ -281,3 +285,5 @@ def map_info(request):
             return JsonResponse({'message': 'map not exist'})
         map = transfer(map0)
         return JsonResponse({'message': 'map open success', 'map' : ClassToDict(map)})
+    else:
+        return render(request, 'map_info_test.html', locals())  # for test

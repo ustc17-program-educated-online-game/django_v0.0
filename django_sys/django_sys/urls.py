@@ -29,5 +29,6 @@ urlpatterns = [
     path('captcha/', include('captcha.urls')),
     path('confirm/', views1.user_confirm),
     path('game/', views2.game),
-    path('map/',views2.map_info)
+    path('map/', views2.map_info),
+    path('mapeditor/', views2.map_editor)
 ]
